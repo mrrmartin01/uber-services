@@ -12,6 +12,12 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/uber-services/main",
+    "start:rider": "nest start rider",
+    "start:rider:dev": "nest start rider --watch",
+    "start:logging": "nest start logging",
+    "start:logging:dev": "nest start logging --watch",
+    "start:all": "concurrently \"npm run start:rider\" \"npm run start:logging\"",
+    "start:all:dev": "concurrently \"npm run start:rider:dev\" \"npm run start:logging:dev\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -22,13 +28,17 @@
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/microservices": "^11.1.6",
     "@nestjs/mongoose": "^11.0.3",
     "@nestjs/platform-express": "^11.0.1",
+    "add": "^2.0.6",
+    "ajv": "8.16.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "mongoose": "^8.17.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
