@@ -1,98 +1,189 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Uber Services Monorepo
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A scalable, modular backend system for ride-hailing and logistics, built with [NestJS](https://nestjs.com/) and TypeScript. This monorepo contains multiple microservices, including logging, rider management, and a core Uber-like service, designed for extensibility and maintainability.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Monorepo Structure](#monorepo-structure)
+- [Services](#services)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Testing](#testing)
+- [Docker & Deployment](#docker--deployment)
+- [API Documentation](#api-documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## Project Overview
 
-```bash
-$ yarn install
+This project is a monorepo for Uber-like backend services, leveraging NestJS for modularity and scalability. It is organized into separate applications for core services, logging, and rider management, each with its own domain logic and API endpoints.
+
+---
+
+## Monorepo Structure
+
+```
+uber-services/
+├── apps/
+│   ├── logging/
+│   │   └── src/
+│   │       ├── logging.controller.ts
+│   │       ├── logging.service.ts
+│   │       ├── rider-coordinates/
+│   │       │   ├── rider-coordinates.controller.ts
+│   │       │   ├── rider-coordinates.service.ts
+│   │       │   ├── dto/
+│   │       │   │   └── Create-Coordinates.dto.ts
+│   │       │   └── schemas/
+│   │       │       └── rider-coordinates.schema.ts
+│   ├── rider/
+│   │   └── src/
+│   │       ├── rider.controller.ts
+│   │       ├── rider.service.ts
+│   └── uber-services/
+│       └── src/
+│           ├── app.controller.ts
+│           ├── app.service.ts
+│           └── main.ts
+├── docker-compose.yml
+├── package.json
+├── tsconfig.json
+├── README.md
+└── ...
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ yarn run start
+## Services
 
-# watch mode
-$ yarn run start:dev
+### 1. Logging Service
+- Handles application and ride event logging.
+- Includes a `rider-coordinates` module for tracking and storing rider locations.
 
-# production mode
-$ yarn run start:prod
+### 2. Rider Service
+- Manages rider profiles, registration, and related operations.
+
+### 3. Uber Services (Core)
+- Main entry point for ride-hailing logic, trip management, and orchestration.
+
+---
+
+## Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [Yarn](https://yarnpkg.com/)
+- [Docker](https://www.docker.com/) (for containerized development)
+
+### Installation
+
+1. **Clone the repository:**
+	```sh
+	git clone https://github.com/mrrmartin01/uber-services.git
+	cd uber-services
+	```
+
+2. **Install dependencies:**
+	```sh
+	yarn install
+	```
+
+3. **Configure environment variables:**
+	- Copy `.env.example` to `.env` in each service directory (if present) and update values as needed.
+
+---
+
+## Development
+
+### Running Services Locally
+
+Each service can be run independently for development:
+
+```sh
+# Example: Run the logging service
+cd apps/
+yarn start logging
+
+# Example: Run the rider service
+yarn start rider
+
+# Example: Run the core Uber service
+cd apps/uber-services
+yarn start:dev
 ```
 
-## Run tests
+Or use Docker Compose to run all services:
 
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```sh
+docker-compose up --build
 ```
 
-## Deployment
+### Project Scripts
+- `yarn start:dev` — Start a service in development mode (hot reload).
+- `yarn build` — Build the service for production.
+- `yarn test` — Run unit tests.
+- `yarn lint` — Lint the codebase.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Testing
 
-```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+Each service includes unit and e2e tests:
+
+```sh
+# From the root or inside a service directory
+yarn run test
+yarn run test:e2e
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Test files are located in the `test/` folders within each service.
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Docker & Deployment
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- Use `docker-compose.yml` to orchestrate all services and dependencies (e.g., databases).
+- Build and run all services:
+  ```sh
+  docker-compose up --build
+  ```
+- Stop services:
+  ```sh
+  docker-compose down
+  ```
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## API Documentation
 
-## Stay in touch
+- Each service exposes RESTful endpoints. See the respective controller files for details.
+- For API testing, use the provided `rest.http` file or tools like Postman.
+- Consider integrating Swagger (NestJS supports it) for live API docs.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
+
+## Contributing
+
+1. Fork the repository and create your branch from `master`.
+2. Follow the existing code style and naming conventions.
+3. Write clear commit messages and document your changes.
+4. Ensure all tests pass before submitting a pull request.
+5. For major changes, open an issue first to discuss your proposal.
+
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## Contact
+
+For questions or support, please open an issue or contact the maintainer at [GitHub](https://github.com/mrrmartin01/uber-services).
+yarn start logging -w = run logging service
+yarn start rider -w = run rider service

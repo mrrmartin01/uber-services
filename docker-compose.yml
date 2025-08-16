@@ -10,5 +10,29 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  logging:
+    build:
+      context: ./apps/logging
+    container_name: logging-service
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://root:123@mongo:27017/
+    depends_on:
+      - mongo
+    ports:
+      - "3001:3000"
+
+  rider:
+    build:
+      context: ./apps/rider
+    container_name: rider-service
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://root:123@mongo:27017/
+    depends_on:
+      - mongo
+    ports:
+      - "3002:3000"
+
 volumes:
   mongo-data:
