@@ -184,4 +184,4 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ## Contact
 
-For questions or support, please open an issue or contact the maintainer at [GitHub](https://github.com/mrrmartin01/uber-services).
+For questions or support, please open an issue or contact the maintainer at [Theophilus Martin](mailto:theophilusmartin@zohomail.com)
